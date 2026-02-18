@@ -1,12 +1,16 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { AttendanceRecord } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Initialize Gemini API client strictly following guidelines using process.env.API_KEY directly
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+/**
+ * Gets attendance insights using Gemini AI.
+ * Uses gemini-3-flash-preview for summarization task as per task type guidelines.
+ */
 export const getAttendanceInsights = async (records: AttendanceRecord[]) => {
-  if (!process.env.API_KEY) return "AI Insight tidak tersedia tanpa API Key.";
-
+  // Assume process.env.API_KEY is pre-configured and accessible per guidelines
   try {
     const summary = records.map(r => `${r.studentName} (${r.className}) - ${r.type} pada ${r.timestamp}`).join('\n');
     
@@ -18,6 +22,7 @@ export const getAttendanceInsights = async (records: AttendanceRecord[]) => {
       }
     });
 
+    // Directly access the .text property of the GenerateContentResponse object (not a method)
     return response.text;
   } catch (error) {
     console.error("Gemini Error:", error);
