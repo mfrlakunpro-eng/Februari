@@ -8,8 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-      // Polyfill 'process' untuk mencegah ReferenceError di browser
-      window.process = window.process || { env: {} };
+      // Shim process.env untuk mencegah crash pada library yang mengaksesnya di browser
+      window.process = { 
+        env: { 
+          NODE_ENV: 'production'
+        } 
+      };
     </script>
     <style>
         body {
@@ -28,20 +32,20 @@
 <script type="importmap">
 {
   "imports": {
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "react": "https://esm.sh/react@19.0.0",
-    "react/": "https://esm.sh/react@19.0.0/",
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.474.0?deps=react@18.3.1",
+    "recharts": "https://esm.sh/recharts@2.15.0?deps=react@18.3.1,react-dom@18.3.1",
     "@google/genai": "https://esm.sh/@google/genai@1.41.0",
-    "lucide-react": "https://esm.sh/lucide-react@0.474.0",
-    "recharts": "https://esm.sh/recharts@2.15.0"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
   }
 }
 </script>
 </head>
 <body class="bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
     <div id="root"></div>
-    <!-- Memuat file entry point aplikasi -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
