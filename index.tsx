@@ -1,5 +1,5 @@
 
-import React, { ReactNode, Component, ErrorInfo } from 'react';
+import React, { ReactNode, ErrorInfo } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
@@ -12,37 +12,28 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-/**
- * ErrorBoundary to catch top-level initialization and runtime errors.
- * Explicitly typed inheritance from Component fixes property access errors.
- */
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  // Fix for line 68: Declare props property to ensure compiler visibility in this environment
-  public props: ErrorBoundaryProps;
-
-  // Fix for lines 18, 30, 42: Declare state property to ensure compiler visibility
-  public state: ErrorBoundaryState = { 
+// Fixed ErrorBoundary by using React.Component and declaring the state property to resolve property existence errors
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  // Explicitly initialize state as a class property for better TypeScript inference
+  state: ErrorBoundaryState = { 
     hasError: false, 
     error: null 
   };
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    // Fix for line 68: Explicitly initialize props to satisfy compiler property checks
-    this.props = props;
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  // Fix: Explicitly use ErrorInfo type from react
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Critical Runtime Error:", error, errorInfo);
   }
 
   render() {
-    // Fix for line 30: Property access through properly inherited state
+    // Accessing this.state which is now properly typed
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-white p-10 text-center">
@@ -52,23 +43,22 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">Inisialisasi Gagal</h1>
-            <p className="text-slate-500 text-sm">Aplikasi mengalami kendala saat memuat library. Pastikan koneksi internet stabil dan coba muat ulang.</p>
+            <h1 className="text-2xl font-bold text-slate-900">Aplikasi Berhenti</h1>
+            <p className="text-slate-500 text-sm">Terjadi kesalahan teknis saat menjalankan komponen. Silakan muat ulang halaman.</p>
             <div className="p-3 bg-slate-50 rounded-lg text-[10px] font-mono text-rose-500 overflow-auto text-left border border-slate-200">
-              {/* Fix for line 42: Property access through properly inherited state */}
               {this.state.error?.message}
             </div>
             <button 
               onClick={() => window.location.reload()}
               className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition-all"
             >
-              Muat Ulang Sekarang
+              Muat Ulang
             </button>
           </div>
         </div>
       );
     }
-    // Fix for line 68: Property access through properly declared props member
+    // Accessing this.props which is now properly typed via React.Component
     return this.props.children;
   }
 }
@@ -76,16 +66,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
-  try {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(
-      <React.StrictMode>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
-      </React.StrictMode>
-    );
-  } catch (err) {
-    console.error("Failed to create React root:", err);
-  }
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
 }
