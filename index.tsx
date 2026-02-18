@@ -17,6 +17,9 @@ interface ErrorBoundaryState {
  * Explicitly typed inheritance from Component fixes property access errors.
  */
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  // Fix for line 68: Declare props property to ensure compiler visibility in this environment
+  public props: ErrorBoundaryProps;
+
   // Fix for lines 18, 30, 42: Declare state property to ensure compiler visibility
   public state: ErrorBoundaryState = { 
     hasError: false, 
@@ -25,7 +28,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    // Fix: Using class property initialization instead of direct assignment in constructor
+    // Fix for line 68: Explicitly initialize props to satisfy compiler property checks
+    this.props = props;
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
@@ -64,7 +68,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         </div>
       );
     }
-    // Fix for line 54: Property access through properly inherited props
+    // Fix for line 68: Property access through properly declared props member
     return this.props.children;
   }
 }
