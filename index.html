@@ -8,10 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-      // Shim process.env untuk mencegah crash pada library yang mengaksesnya di browser
+      // Shim process.env segera sebelum modul lain dimuat
       window.process = { 
         env: { 
-          NODE_ENV: 'production'
+          NODE_ENV: 'production',
+          API_KEY: '' // Akan diisi oleh environment variable sistem
         } 
       };
     </script>
