@@ -1,0 +1,7 @@
+{
+  "name": "AbsenSiswa Pro",
+  "description": "Sistem absensi siswa modern dengan dukungan QR Code, NFC, dan analisis AI untuk manajemen sekolah yang efisien.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
